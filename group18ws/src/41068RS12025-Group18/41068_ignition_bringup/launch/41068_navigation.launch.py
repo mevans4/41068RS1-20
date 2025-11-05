@@ -1,6 +1,7 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -37,8 +38,18 @@ def generate_launch_description():
         }.items()
     )
 
+    # Start Path Planner Node (from Group 20)
+    path_planner_node = Node(
+        package='path_planner_cpp',
+        executable='planner_node',
+        name='path_planner',
+        output='screen',
+        parameters=[{'use_sim_time': use_sim_time}]
+    )
+
     ld.add_action(use_sim_time_launch_arg)
     ld.add_action(slam)
     ld.add_action(navigation)
+    ld.add_action(path_planner_node)
 
     return ld
