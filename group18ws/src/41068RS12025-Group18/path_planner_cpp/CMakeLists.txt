@@ -12,7 +12,14 @@ find_package(nav2_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(rclcpp_action REQUIRED)
-find_package(std_srvs REQUIRED) 
+find_package(std_srvs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+
+# Generate service files
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "srv/PlanToGoal.srv"
+  DEPENDENCIES geometry_msgs
+)
 
 include_directories(include)
 
@@ -26,6 +33,10 @@ ament_target_dependencies(planner_node
   nav_msgs
   std_srvs
 )
+
+# Link the generated interfaces to the executable
+rosidl_target_interfaces(planner_node
+  ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 install(TARGETS
   planner_node
