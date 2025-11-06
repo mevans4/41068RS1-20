@@ -1,0 +1,6 @@
+# Request: empty (uses internally stored goals)
+---
+# Response: Path waypoints
+geometry_msgs/Point[] path
+bool success
+string message

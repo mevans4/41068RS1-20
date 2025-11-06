@@ -18,12 +18,14 @@ find_package(rosidl_default_generators REQUIRED)
 # Generate service files
 rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/PlanToGoal.srv"
+  "srv/PathPlanner.srv"
   DEPENDENCIES geometry_msgs
 )
 
 include_directories(include)
 
 add_executable(planner_node src/planner_node.cpp)
+add_executable(path_planner_service_node src/path_planner_service_node.cpp)
 
 ament_target_dependencies(planner_node
   rclcpp
@@ -34,12 +36,22 @@ ament_target_dependencies(planner_node
   std_srvs
 )
 
-# Link the generated interfaces to the executable
+ament_target_dependencies(path_planner_service_node
+  rclcpp
+  nav_msgs
+  geometry_msgs
+)
+
+# Link the generated interfaces to the executables
 rosidl_target_interfaces(planner_node
+  ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+rosidl_target_interfaces(path_planner_service_node
   ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 install(TARGETS
   planner_node
+  path_planner_service_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
